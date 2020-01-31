@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Booking;
+using Infrastructure.Event;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Core.Event
 {
-    public class BookingCreated : Event<BookingCreatedData>, IEvent<Booking>
+    public class BookingCreated : Event<BookingCreatedData, Booking>
     {
-        public async Task Project(Booking aggregate)
+        public override async Task Project(Booking aggregate)
         {
             aggregate.ArriveDate = Data.ArriveDate;
             aggregate.CustomerName = Data.CustomerName;

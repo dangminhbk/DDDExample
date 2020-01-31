@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Core.EventStore
+namespace Core.Domain.Booking.Dto
 {
-    public class EventStore
+    public class BookingUpdateDto
     {
     }
 }

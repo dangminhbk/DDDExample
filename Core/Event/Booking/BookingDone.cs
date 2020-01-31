@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Booking;
+using Infrastructure.Event;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Core.Event
 {
-    public class BookingDone : Event<BookingDoneData>, IEvent<Booking>
+    public class BookingDone : Event<BookingDoneData,Booking>
     {
-        public async Task Project(Booking aggregate)
+        public override async Task Project(Booking aggregate)
         {
             aggregate.DoneDate = Data.DoneDate;
             aggregate.Status = Enums.BookingStatus.Done;

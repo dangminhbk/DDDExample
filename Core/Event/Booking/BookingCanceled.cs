@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Booking;
 using Core.Enums;
+using Infrastructure.Event;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,13 +8,11 @@ using System.Threading.Tasks;
 
 namespace Core.Event
 {
-    public class BookingCanceled : Event<BookingCanceledData>, IEvent<Booking>
+    public class BookingCanceled : Event<BookingCanceledData, Booking>
     {
-        public async Task Project(Booking aggregate)
+        public override Task Project(Booking aggregate)
         {
-            aggregate.CanceledDate = Data.CanceledDate;
-            aggregate.Status = BookingStatus.Canceled;
-            await Task.CompletedTask;
+            throw new NotImplementedException();
         }
     }
 

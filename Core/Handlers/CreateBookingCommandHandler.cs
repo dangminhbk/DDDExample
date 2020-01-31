@@ -4,7 +4,6 @@ using Core.Domain.Booking.Dto;
 using Core.Entities;
 using Core.Entities.Booking;
 using Core.Event;
-using Core.EventStore;
 using Core.Handlers.Response;
 using MediatR;
 using System;
