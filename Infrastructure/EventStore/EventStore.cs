@@ -11,26 +11,43 @@ namespace Infrastructure.EventStore
     public class EventStore<EventAggregate> : IEventStore<EventAggregate>
         where EventAggregate : Entities.Aggregate
     {
-        private List<Event<EventData, EventAggregate>> _store { get; set; }
+        private List<IEvent<EventAggregate>> _store { get; set; }
 
-        public Task<List<IEvent<EventAggregate>>> EntityHistory(Guid id)
+        public async Task<List<IEvent<EventAggregate>>> EntityHistory(Guid id)
         {
-            throw new NotImplementedException();
+            return _store
+                    .Where(e => e.AggregateId == id)
+                    .OrderBy(s => s.Version)
+                    .ThenBy(s => s.DateAdded)
+                    .ToList();
         }
 
-        public Task<List<IEvent<EventAggregate>>> History()
+        public async Task<List<IEvent<EventAggregate>>> History()
         {
-            throw new NotImplementedException();
+            return _store
+                    .OrderBy(s => s.Version)
+                    .ThenBy(s => s.DateAdded)
+                    .ToList();
         }
 
-        public Task<EventAggregate> Project(Guid id)
+        public async Task<EventAggregate> Project(Guid id)
         {
-            throw new NotImplementedException();
+            EventAggregate aggregate = (EventAggregate) Aggregate.Reconstruct();
+            var history = _store
+                    .Where(e => e.AggregateId == id)
+                    .OrderBy(s => s.Version)
+                    .ThenBy(s => s.DateAdded);
+            foreach (var item in history)
+            {
+                await item.Project(aggregate);
+            }
+            return aggregate;
         }
 
-        public Task Push(IEvent<EventAggregate> @event)
+        public async Task Push(IEvent<EventAggregate> @event)
         {
-            throw new NotImplementedException();
+            _store.Add(@event);
+            await Task.CompletedTask;
         }
     }
 }
