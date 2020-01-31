@@ -20,6 +20,7 @@ namespace Web.Controllers
         {
             _mediator = mediator;
         }
+        [HttpPost]
         public async Task CreateBooking(CreateBookingInput input)
         {
             var request = new CreateBookingCommand {
@@ -30,7 +31,7 @@ namespace Web.Controllers
 
             await _mediator.Send<ResponseBase>(request);
         }
-
+        [HttpGet]
         public async Task HistoryBooking() 
         {
         }

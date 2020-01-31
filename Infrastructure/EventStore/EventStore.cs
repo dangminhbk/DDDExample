@@ -12,6 +12,10 @@ namespace Infrastructure.EventStore
         where EventAggregate : Entities.Aggregate
     {
         private List<IEvent<EventAggregate>> _store { get; set; }
+        public EventStore()
+        {
+            _store = new List<IEvent<EventAggregate>>();
+        }
 
         public async Task<List<IEvent<EventAggregate>>> EntityHistory(Guid id)
         {
