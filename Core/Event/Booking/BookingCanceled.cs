@@ -8,16 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Event
 {
-    public class BookingCanceled : Event<BookingCanceledData, Booking>
+    public class BookingCanceled : Event<Booking>
     {
-        public override Task Project(Booking aggregate)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class BookingCanceledData : EventData
-    {
-        public DateTime CanceledDate { get; set; }
     }
 }

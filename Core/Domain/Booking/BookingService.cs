@@ -21,12 +21,6 @@ namespace Core.Domain.Booking
             var AggregateId = new Guid();
             var bookingCreated = new BookingCreated
             {
-                Data = new BookingCreatedData
-                {
-                    ArriveDate = input.ArriveDate,
-                    CustomerName = input.CustomerName,
-                    RoomName = input.RoomName
-                },
                 AggregateId = AggregateId,
                 DateAdded = DateTime.Now,
                 Version = 0
@@ -47,11 +41,6 @@ namespace Core.Domain.Booking
             var BookingUpdated = new BookingUpdated
             {
                 AggregateId = input.AggregateId,
-                Data = new BookingUpdatedData
-                {
-                    ArriveDate = input.ArriveDate,
-                    RoomName = input.RoomName
-                },
                 DateAdded = DateTime.Now,
                 Version = currentVersion++
             };

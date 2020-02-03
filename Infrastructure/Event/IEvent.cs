@@ -13,5 +13,6 @@ namespace Infrastructure.Event
 
         DateTime DateAdded { get; set; }
         int Version { get; set; }
+        
     }
 }

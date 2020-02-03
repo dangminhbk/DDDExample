@@ -1,15 +1,21 @@
-﻿using System;
+﻿using Infrastructure.Reflection;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Event
 {
-    public abstract class Event<EventData, EventAggregate> : IEvent<EventAggregate>
-        where EventData : Event.EventData
+    public abstract class Event<EventAggregate> : IEvent<EventAggregate>
         where EventAggregate : Entities.Aggregate
     {
-        public abstract Task Project(EventAggregate aggregate);
+        public async Task Project(EventAggregate aggregate)
+        {
+            foreach (var item in Data.Changes)
+            {
+                aggregate.Set(item.PropertyName,(object)item.Value);
+            }
+        }
 
         public Guid AggregateId { get; set; }
         public DateTime DateAdded { get; set; }
