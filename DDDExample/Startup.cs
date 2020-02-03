@@ -8,6 +8,8 @@ using Core.Command;
 using Microsoft.OpenApi.Models;
 using Infrastructure.EventStore;
 using Core.Domain.Booking;
+using Core.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DDDExample
 {
@@ -23,6 +25,9 @@ namespace DDDExample
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<HotelDBContext>(s=> {
+                s.UseNpgsql(Configuration.GetConnectionString("Default"));
+            });
             services.AddRazorPages();
             services.AddControllers();          
             services.AddSwaggerGen(c =>

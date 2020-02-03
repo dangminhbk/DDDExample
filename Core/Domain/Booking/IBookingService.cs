@@ -9,5 +9,6 @@ namespace Core.Domain.Booking
     public interface IBookingService
     {
         Task<bool> CreateBooking(BookingCreateDto input);
+        Task<bool> UpdateBooking(BookingUpdateDto input);
     }
 }

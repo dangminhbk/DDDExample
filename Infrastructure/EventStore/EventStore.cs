@@ -60,9 +60,9 @@ namespace Infrastructure.EventStore
             return lastest==null ? -1 : lastest.Version;
         }
 
-        public Task<int> GenerateVersion(Guid id)
+        public async Task<int> GenerateVersion(Guid id)
         {
-            var currentVersion = this.GetCurrentVersion(id);
+            var currentVersion = await this.GetCurrentVersion(id);
             return currentVersion + 1;
         }
     }
