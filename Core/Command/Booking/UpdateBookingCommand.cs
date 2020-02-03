@@ -7,5 +7,8 @@ namespace Core.Command.Booking
 {
     public class UpdateBookingCommand
     {
+        public Guid AggregateId { get; set; }
+        public DateTime ArriveDate { get; set; }
+        public string RoomName { get; set; }
     }
 }

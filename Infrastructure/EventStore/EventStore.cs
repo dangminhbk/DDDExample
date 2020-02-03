@@ -53,5 +53,17 @@ namespace Infrastructure.EventStore
             _store.Add(@event);
             await Task.CompletedTask;
         }
+
+        public async Task<int> GetCurrentVersion(Guid id)
+        {
+            var lastest = _store.Where(s=>s.AggregateId == id).OrderByDescending(s=>s.Version).FirstOrDefault();
+            return lastest==null ? -1 : lastest.Version;
+        }
+
+        public Task<int> GenerateVersion(Guid id)
+        {
+            var currentVersion = this.GetCurrentVersion(id);
+            return currentVersion + 1;
+        }
     }
 }

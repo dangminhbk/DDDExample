@@ -24,14 +24,14 @@ namespace DDDExample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddMediatR(typeof(CreateBookingCommand));
-            services.AddControllers();
+            services.AddControllers();          
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
-
+            AddMeditR(services);
             AddDepedency(services);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +44,6 @@ namespace DDDExample
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -53,8 +52,6 @@ namespace DDDExample
 
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
@@ -75,6 +72,10 @@ namespace DDDExample
         {
             services.AddSingleton<IEventStore<Core.Entities.Booking.Booking>, EventStore<Core.Entities.Booking.Booking>>();
             services.AddTransient<IBookingService, BookingService>();
+        }
+        private void AddMeditR(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(CreateBookingCommand));
         }
     }
 }

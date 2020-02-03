@@ -15,5 +15,7 @@ namespace Infrastructure.EventStore
         Task<List<IEvent<EventAggregate>>> History();
         Task<List<IEvent<EventAggregate>>>EntityHistory(Guid id);
         Task<EventAggregate> Project(Guid id);
+        Task<int> GetCurrentVersion(Guid id);
+        Task<int> GenerateVersion(Guid id);
     }
 }

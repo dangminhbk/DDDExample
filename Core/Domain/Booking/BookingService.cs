@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.EventStore;
+using Core.Constants;
 
 namespace Core.Domain.Booking
 {
@@ -28,9 +29,33 @@ namespace Core.Domain.Booking
                 },
                 AggregateId = AggregateId,
                 DateAdded = DateTime.Now,
-                Version = 1
+                Version = 0
             };
             await _eventStore.Push(bookingCreated);
+            return true;
+        }
+
+        public async Task<bool> UpdateBooking(BookingUpdateDto input) 
+        {
+            var currentVersion = await _eventStore.GetCurrentVersion(input.AggregateId);
+            if (currentVersion == EventConstants.NOT_VALID_VERSION)
+            {
+                return false;
+            }
+
+            // TODO check if booking was canceled or done
+            var BookingUpdated = new BookingUpdated
+            {
+                AggregateId = input.AggregateId,
+                Data = new BookingUpdatedData
+                {
+                    ArriveDate = input.ArriveDate,
+                    RoomName = input.RoomName
+                },
+                DateAdded = DateTime.Now,
+                Version = currentVersion++
+            };
+            await _eventStore.Push(BookingUpdated);
             return true;
         }
     }
