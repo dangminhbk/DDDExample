@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Infrastructure.Mongo
 {
@@ -20,22 +21,24 @@ namespace Infrastructure.Mongo
             _mongoClient = mongoClient;
             _configuration = configuration;
         }
-        public Task<List<IEvent<T>>> EntityHistory(Guid id)
+        public async Task<List<Event<T>>> EntityHistory(Guid id)
         {
-            throw new NotImplementedException();
+            var history = (await Collections.FindAsync(s=>s.AggregateId == id)).ToList();
+            return history;
         }
 
-        public Task<int> GenerateVersion(Guid id)
+        public async Task<int> GenerateVersion(Guid id)
         {
-            throw new NotImplementedException();
+            return await GetCurrentVersion(id) + 1;
         }
 
-        public Task<int> GetCurrentVersion(Guid id)
+        public async Task<int> GetCurrentVersion(Guid id)
         {
-            throw new NotImplementedException();
+            var last = Collections.Find(s => s.AggregateId == id).SortByDescending(s => s.Version).FirstOrDefault();
+            return last == null ? -1 : last.Version;
         }
 
-        public Task<List<IEvent<T>>> History()
+        public Task<List<Event<T>>> History()
         {
             throw new NotImplementedException();
         }
@@ -45,16 +48,16 @@ namespace Infrastructure.Mongo
             throw new NotImplementedException();
         }
 
-        public Task Push(IEvent<T> @event)
+        public async Task Push(Event<T> @event)
         {
-            throw new NotImplementedException();
+            Collections.InsertOneAsync((Event<T>)@event);
         }
 
-        protected IMongoCollection<T> Collections
+        protected IMongoCollection<Event<T>> Collections
         {
             get
             {
-                return _mongoClient.GetDatabase(_configuration.GetConnectionString("Mongo")).GetCollection<T>(nameof(T));
+                return _mongoClient.GetDatabase("EventStore").GetCollection<Event<T>>(typeof(T).Name);
             }
         }
     }

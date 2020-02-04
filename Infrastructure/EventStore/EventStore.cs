@@ -11,13 +11,13 @@ namespace Infrastructure.EventStore
     public class EventStore<EventAggregate> : IEventStore<EventAggregate>
         where EventAggregate : Entities.Aggregate
     {
-        private List<IEvent<EventAggregate>> _store { get; set; }
+        private List<Event<EventAggregate>> _store { get; set; }
         public EventStore()
         {
-            _store = new List<IEvent<EventAggregate>>();
+            _store = new List<Event<EventAggregate>>();
         }
 
-        public async Task<List<IEvent<EventAggregate>>> EntityHistory(Guid id)
+        public async Task<List<Event<EventAggregate>>> EntityHistory(Guid id)
         {
             return _store
                     .Where(e => e.AggregateId == id)
@@ -26,7 +26,7 @@ namespace Infrastructure.EventStore
                     .ToList();
         }
 
-        public async Task<List<IEvent<EventAggregate>>> History()
+        public async Task<List<Event<EventAggregate>>> History()
         {
             return _store
                     .OrderBy(s => s.Version)
@@ -48,7 +48,7 @@ namespace Infrastructure.EventStore
             return aggregate;
         }
 
-        public async Task Push(IEvent<EventAggregate> @event)
+        public async Task Push(Event<EventAggregate> @event)
         {
             _store.Add(@event);
             await Task.CompletedTask;

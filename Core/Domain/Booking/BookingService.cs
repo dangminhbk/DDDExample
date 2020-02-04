@@ -47,5 +47,6 @@ namespace Core.Domain.Booking
             await _eventStore.Push(BookingUpdated);
             return true;
         }
+
     }
 }

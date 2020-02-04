@@ -10,6 +10,8 @@ using Infrastructure.EventStore;
 using Core.Domain.Booking;
 using Core.Data;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using Infrastructure.Mongo;
 
 namespace DDDExample
 {
@@ -75,12 +77,16 @@ namespace DDDExample
 
         private void AddDepedency(IServiceCollection services)
         {
-            services.AddSingleton<IEventStore<Core.Entities.Booking.Booking>, EventStore<Core.Entities.Booking.Booking>>();
             services.AddTransient<IBookingService, BookingService>();
+            services.AddSingleton<IMongoClient, MongoClient>(s=> {
+                return new MongoClient(Configuration.GetConnectionString("Mongo"));
+            });
+            services.AddSingleton<IEventStore<Core.Entities.Booking.Booking>, MongoStore<Core.Entities.Booking.Booking>>();
         }
         private void AddMeditR(IServiceCollection services)
         {
             services.AddMediatR(typeof(CreateBookingCommand));
         }
+    
     }
 }
