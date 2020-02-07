@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Core.Domain.Booking.Dto
 {
-    public class BookingCreateDto
+    public class BookingUpdateInput
     {
-        public string CustomerName { get; set; }
-        public string RoomName { get; set; }
+        public Guid AggregateId { get; set; }
         public DateTime ArriveDate { get; set; }
+        public string RoomName { get; set; }
     }
 }

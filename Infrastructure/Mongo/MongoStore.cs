@@ -38,14 +38,22 @@ namespace Infrastructure.Mongo
             return last == null ? -1 : last.Version;
         }
 
-        public Task<List<Event<T>>> History()
+        public async Task<List<Event<T>>> History()
         {
-            throw new NotImplementedException();
+            var history = (await Collections.FindAsync(s => true)).ToList();
+            return history;
         }
 
-        public Task<T> Project(Guid id)
+        public async Task<T> Project(Guid id)
         {
-            throw new NotImplementedException();
+            T aggregate = (T)Aggregate.Reconstruct();
+            var history = (await this.EntityHistory(id)).OrderBy(s=> s.Version);
+
+            foreach (var item in history)
+            {
+                await item.Project(aggregate);
+            }
+            return aggregate;
         }
 
         public async Task Push(Event<T> @event)

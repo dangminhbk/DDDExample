@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Core.Command.Booking
 {
-    public class CancelBookingCommand : IRequest<ResponseBase>
+    public class DoneBookingCommand : IRequest<ResponseBase>
     {
         public Guid AggregateId { get; set; }
     }
